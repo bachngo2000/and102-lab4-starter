@@ -21,6 +21,8 @@ fun createJson() = Json {
 
 private const val TAG = "MainActivity/"
 private var SEARCH_API_KEY = BuildConfig.API_KEY
+// Since we will be using the Article Search API, this is the endpoint that we'll be using
+// It references the API key with ${SEARCH_API_KEY}
 private var ARTICLE_SEARCH_URL =
     "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${SEARCH_API_KEY}"
 
@@ -43,17 +45,16 @@ class MainActivity : AppCompatActivity() {
             articlesRecyclerView.addItemDecoration(dividerItemDecoration)
         }
 
+        // Using the AsyncHTTPClient to request the data from the search API.
         val client = AsyncHttpClient()
         client.get(ARTICLE_SEARCH_URL, object : JsonHttpResponseHandler() {
-            override fun onFailure(
-                statusCode: Int,
-                headers: Headers?,
-                response: String?,
-                throwable: Throwable?
-            ) {
+
+            // In case the request fails, we'll be logging the error
+            override fun onFailure(statusCode: Int, headers: Headers?, response: String?, throwable: Throwable?) {
                 Log.e(TAG, "Failed to fetch articles: $statusCode")
             }
 
+            // If it's successful, we'll need to parse through the JSON data that we get back to get the articles.
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
                 Log.i(TAG, "Successfully fetched articles: $json")
                 try {
