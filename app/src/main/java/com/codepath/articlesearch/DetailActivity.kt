@@ -18,12 +18,27 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        // TODO: Find the views for the screen
+        // Find the views for the screen
+        mediaImageView = findViewById(R.id.mediaImage)
+        titleTextView = findViewById(R.id.mediaTitle)
+        bylineTextView = findViewById(R.id.mediaByline)
+        abstractTextView = findViewById(R.id.mediaAbstract)
 
-        // TODO: Get the extra from the Intent
+        // Get the extra from the Intent
+        // Next, we will get the information from the Intent that was passed to the DetailActivity.
+        // We can get this using .getSerializableExtra() and passing in the name of the extra we need:
+        val article = intent.getSerializableExtra(ARTICLE_EXTRA) as Article
 
-        // TODO: Set the title, byline, and abstract information from the article
+        // Once we have the article object, we can then access the properties on it using our dot notation.
+        // Set the title, byline, and abstract information from the article
+        titleTextView.text = article.headline?.main
+        bylineTextView.text = article.byline?.original
+        abstractTextView.text = article.abstract
 
-        // TODO: Load the media image
+        // Load the media image
+        // we'll use Glide to set our image, using the mediaImageUrl we have from the article object
+        Glide.with(this)
+            .load(article.mediaImageUrl)
+            .into(mediaImageView)
     }
 }
